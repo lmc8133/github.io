@@ -145,6 +145,71 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://lumingcong.top/2021/09/10/Attention-is-all-you-need/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lu Mingcong">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mingcong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/10/Attention-is-all-you-need/" class="post-title-link" itemprop="url">Attention is all you need</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-10 16:14:12 / Modified: 20:46:42" itemprop="dateCreated datePublished" datetime="2021-09-10T16:14:12+08:00">2021-09-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h1><p>模型主要用于解决Sequence to Sequence问题。论文原文就是用于解决自然语言翻译问题，English-to-German, English-to-French.</p>
+<h2 id="Transformer-Structure"><a href="#Transformer-Structure" class="headerlink" title="Transformer Structure"></a>Transformer Structure</h2><p>总体包括一个Encoders和一个Decoders<br><img src="attention_4.jpg"><br>Encoders和Decoders分别由6个Encoder和Decoder堆叠而成<br><img src="attention_5.jpg"><br>论文原图<br><img src="attention_10.jpg"><br>每个Encoder包含Self-Attention和FFNN子层<br><img src="attention_6.jpg"><br>每个Decoder包含Self-Attention、Encoder-Decoder-Attention(接受最后一个Encode层的输出和当前Decode层的attention输出作为输入)和FFNN子层<br><img src="attention_7.jpg"></p>
+<h2 id="Self-Attention"><a href="#Self-Attention" class="headerlink" title="Self Attention"></a>Self Attention</h2><p>输入为sequence的vector表示，输出为同样长度的vector list<br>首先将每个输入的sequence vector与矩阵$W^Q_{D\times D’}$相乘，得到对应的query vector $q^i, i$从1到sequence 长度，$q^i$维度为$D’$，论文中为64。这个过程可以看成是一个矩阵乘法，将所有sequence的vector按行叠在一起组成sequence matrix $I_{L\times D}$, L为sequence长度，D为word embedding维度,论文中为512<br>$$Q=IW^Q(L\times D’)$$<br>key，value同理<br>$$K=IW^K$$<br>$$V=IW^V$$<br><img src="attention_1.jpg"><br>将每个单词得到的query表示跟sequence中的所有key表示(包括自己)做内积得到score，用矩阵乘法表示为$QK^T$<br><img src="attention_2.jpg"><br><img src="attention_3.jpg"><br>得到一个单词跟sequence中的所有其他词score后做一个regulazazition，即除以$\sqrt{d_{score}}=\sqrt{64}=8$,经过一个softmax层后分别乘上对应词的value表示再求和。这整个过程用如下公式表示<br>$$Z=softmax(\frac{Q\times K^T}{\sqrt{d_{score}}})V$$</p>
+<h2 id="Multi-Head"><a href="#Multi-Head" class="headerlink" title="Multi-Head"></a>Multi-Head</h2><p>每个Encoder都包含8组$W^Q,W^K,W^V$，最终能得到8组$Z$，即Multi-Head。将其拼接在一起然后乘以一个矩阵得到最终的整合表示，再将其输入到当前Encoder的FFNN得到当前Encoder输出，同时当前Encoder的输出作为下一层Encoder的输入。<br><img src="attention_8.jpg"></p>
+<p><img src="attention_9.jpg"><br>#Residual and Normalization<br>图中的a即为上述$Z_{L\times D’}$的一行,b为原始sequence中的一个vector输入，此处做Layer Norm，注意跟batch normalization对比。<br><img src="attention_11.jpg"><br>同样在Encoder中的FFNN子层也有residual和layer norm，具体如上图右侧<br><img src="attention_12.jpg"></p>
+<h2 id="Positional-Encoding"><a href="#Positional-Encoding" class="headerlink" title="Positional Encoding"></a>Positional Encoding</h2><p>这部分不是很清楚，后续结合源码再做补充。<br><img src="attention_13.jpg"></p>
+<p>参考链接：<a target="_blank" rel="noopener" href="http://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://lumingcong.top/2021/09/09/SVM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -400,7 +465,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
